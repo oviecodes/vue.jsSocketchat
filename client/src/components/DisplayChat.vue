@@ -4,8 +4,9 @@
 
 <template>
     <div >
-        <div v-for="(msg, i) in getMessages" :key="i">
-          {{ msg }}  
+        <div v-for="(msg, i) in getMessages" :key="i" :class='msg.type'>
+          <p>{{ msg.msg }}</p>
+          <p>{{ msg.user }}</p>
         </div>
     </div>
 </template>
@@ -16,7 +17,7 @@ export default {
     name: 'DisplayChat',
     data(){
         return {
-           
+
         }
     },
     methods: {
@@ -29,5 +30,16 @@ export default {
 </script>
 
 <style scoped>
+    .adminMessage{
+        position: center;
+        background: pink;
+    }
 
+    .myMessage {
+        background: green;
+    }
+
+    .otherMessages {
+        background: blue;
+    }
 </style>
