@@ -30,6 +30,10 @@ const actions = {
 
   async setMessages({ commit }, msg) {
     commit('setMessages', msg)
+  },
+
+  async resetStateMessages({ commit }) {
+    commit('resetStateMessages')
   }
 };
 
@@ -44,7 +48,9 @@ const mutations = {
     state.socket = socket
   },
 
-  setMessages: (state, msg) => state.messages.push(msg)
+  setMessages: (state, msg) => state.messages.push(msg),
+
+  resetStateMessages: (state) => state.messages = []
 };
 
 export default {
