@@ -32,7 +32,7 @@ export default {
     ...mapGetters(["userDetails"])
   },
   methods: {
-    ...mapActions(['setSocketState', 'setMessages'])
+    ...mapActions(['setSocketState', 'setMessages', 'resetStateMessages'])
   },
   mounted() {
     socket = io(`http://localhost:5000`);
@@ -46,14 +46,30 @@ export default {
 
 
     socket.on('adminMsg', ({ user, msg }) => {
-      this.setMessages(msg)
-      console.log(user, msg)
-      this.adminMessage = msg
+      const message = {
+        user,
+        msg,
+        type: "adminMessage"
+      }
+      this.setMessages(message)
     })
 
     socket.on('clientMessage', ({ user, msg }) => {
-      this.setMessages(msg)
-      console.log(user)
+      let { username, chatroom } = this.userDetails;
+      username = username.trim().toLowerCase()
+      const message = (username === user) ? {
+        user,
+        msg,
+        type: "myMessage",
+        chatroom
+      } : {
+        user,
+        msg,
+        type: "otherMessages",
+        chatroom
+      }
+
+      this.setMessages(message)
     })
 
     console.log(username, chatroom);
@@ -61,7 +77,8 @@ export default {
   },
 
   destroyed() {
-    // socket.disconnect(true)
+    this.resetStateMessages()
+    socket.disconnect(true)
     console.log(socket)
   }
 };
