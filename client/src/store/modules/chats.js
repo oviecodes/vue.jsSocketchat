@@ -1,6 +1,8 @@
 const state = {
   username: "",
-  chatroom: ""
+  chatroom: "",
+  messages: [],
+  socket: null
 };
 
 const getters = {
@@ -10,13 +12,24 @@ const getters = {
       username: state.username,
       chatroom: state.chatroom
     };
-  }
+  },
+  socket: state => state.socket,
+  getMessages: state => state.messages
+
 };
 
 const actions = {
   //actions take a { commit } payload and an object
   async getUserDetails({ commit }, userDetails) {
     commit("setUserData", userDetails);
+  },
+
+  async setSocketState({ commit }, socket) {
+    commit('setSocketState', socket)
+  }, 
+
+  async setMessages({ commit }, msg) {
+    commit('setMessages', msg)
   }
 };
 
@@ -25,7 +38,13 @@ const mutations = {
   setUserData: (state, { username, chatroom }) => {
     state.username = username;
     state.chatroom = chatroom;
-  }
+  },
+
+  setSocketState: (state, socket) => {
+    state.socket = socket
+  },
+
+  setMessages: (state, msg) => state.messages.push(msg)
 };
 
 export default {
