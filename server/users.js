@@ -24,7 +24,7 @@ const addUser = ({id, username, chatroom}) => {
 
     users.push(user)
 
-    return { user }
+    return  { user }
 }
 
 const deleteUser = (id) => {
