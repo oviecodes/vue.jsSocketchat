@@ -24,6 +24,8 @@
       >
         Join
       </button>
+    
+      
 
       <h3>{{ username }}</h3>
       <h3>{{ chatroom }}</h3>
@@ -31,7 +33,7 @@
   </div>
 </template>
 
-<script>
+<script>;
 import { mapActions } from "vuex";
 
 export default {
@@ -48,9 +50,12 @@ export default {
     //on submit
     onSubmit(e) {
       e.preventDefault();
+      
       //onsubmit save Username and selected chatroom to state
       //we pass them as an object
       this.getUserDetails({ username: this.username, chatroom: this.chatroom });
+     
+      this.$router.push({path: `/chat?username=${this.username}&chatroom=${this.chatroom}`})
     }
   },
   computed: {}
