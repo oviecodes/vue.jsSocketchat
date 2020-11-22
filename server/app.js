@@ -22,42 +22,60 @@ app.disable('x-powered-by')
 
 io.on('connection', async(socket) => {
    
-    try {
-
       //when a user joins a room
-      socket.on('newUser', ({ username, chatroom }, callback) => {
+      socket.on('newUser',  async ({ username, chatroom }, callback) => {
+
         const { error, user } = addUser({id: socket.id, username, chatroom})
 
+        console.log(user)
+        console.log(error)
+
         if(error) {
-          Throw (new Error(error))
+          
           return callback(error)
         }
 
-        socket.emit('adminMsg', {user: `admin`, msg: `Hey ${user.username}, welcome to the ${user.chatroom} room`})
+        if(user !== undefined) {
+          socket.emit('adminMsg', {user: `admin`, msg: `Hey ${user.username}, welcome to the ${user.chatroom} room`})
 
-        socket.to(user.chatroom).emit('adminMsg', {user: `admin`, msg: `${user.username} joined the room`})
+          socket.to(user.chatroom).emit('adminMsg', {user: `admin`, msg: `${user.username} joined the room`})
 
-        socket.join(user.chatroom)
+          socket.join(user.chatroom)
+        } else {
+          console.log(`page disconnected`)
+          // return callback({ error: 'User disconnected please refresh page'})
+        }
+
+        
         callback()
       }) 
 
-      socket.on('clientMsg', (msg) => {
+      socket.on('clientMsg', async(msg, callback) => {
         const user = getUser(socket.id)
 
-        io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
-        console.log(msg)
+        if(user !== undefined) {
+          io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
+          console.log(msg)
+        } else {
+          console.log(`page disconnected`)
+          // return callback({ error: 'User disconnected please refresh page'})
+        }
+
       })
       
       //when a user leaves a room or disconnects
-      socket.on('disconnect', () => {
+      socket.on('disconnect', (callback) => {
         const user = getUser(socket.id)
 
-        socket.to(user.chatroom).emit('adminMsg', { user: 'admin', msg: `${user.username} left the room` })
+        if(user !== undefined) {
+          socket.to(user.chatroom).emit('adminMsg', { user: 'admin', msg: `${user.username} left the room` })
+
+        } else {
+          console.log(`page disconnected`)
+          // return callback({ error: 'User disconnected please refresh page'})
+        }
         deleteUser(socket.id)
       })
-    } catch(e) {
-      console.log(e)
-    }
 })
 
 http.listen(PORT, () => {
