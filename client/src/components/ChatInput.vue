@@ -1,7 +1,7 @@
 
 
 <template>
-    <div class>
+    <div class='fixed'>
         <form class="ui form" @submit="sendMsg">
             <!-- username field -->
             <div class="field">
@@ -43,5 +43,9 @@ export default {
 </script>
 
 <style scoped>
-
+    .fixed{
+        position: absolute;
+        top: 90vh;
+        left: 40%
+    }
 </style>
