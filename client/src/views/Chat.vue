@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       message: '',
+      userThingy: { }
     }
   },
   computed: {
@@ -37,8 +38,15 @@ export default {
   mounted() {
     socket = io(`http://localhost:5000`);
     this.setSocketState(socket)
-    const { username, chatroom } = this.userDetails;
 
+    console.log(this.$route.query.username)
+    this.userThingy = 
+    !this.userDetails.username && !this.userDetails.chatroom ? 
+    { username:  this.$route.query.username, chatroom: this.$route.query.chatroom } : 
+    this.userDetails; 
+
+    const { username, chatroom} = this.userThingy
+    
     socket.emit("newUser", { username, chatroom }, () => {
 
     });
@@ -55,7 +63,7 @@ export default {
     })
 
     socket.on('clientMessage', ({ user, msg }) => {
-      let { username, chatroom } = this.userDetails;
+      let { username, chatroom } = this.userThingy;
       username = username.trim().toLowerCase()
       const message = (username === user) ? {
         user,
@@ -80,6 +88,7 @@ export default {
     this.resetStateMessages()
     socket.disconnect(true)
     console.log(socket)
+    this.$router.push({ path: `/` })
   }
 };
 </script>
