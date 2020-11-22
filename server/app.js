@@ -22,33 +22,42 @@ app.disable('x-powered-by')
 
 io.on('connection', async(socket) => {
    
-    //when a user joins a room
-    socket.on('newUser', ({ username, chatroom }, callback) => {
-      const { error, user } = addUser({id: socket.id, username, chatroom})
+    try {
 
-      if(error) {
-        return callback(error)
-      }
+      //when a user joins a room
+      socket.on('newUser', ({ username, chatroom }, callback) => {
+        const { error, user } = addUser({id: socket.id, username, chatroom})
 
-      socket.emit('adminMsg', {user: `admin`, msg: `Hey ${user.username}, welcome to the ${user.chatroom} room`})
+        if(error) {
+          Throw (new Error(error))
+          return callback(error)
+        }
 
-      socket.to(user.chatroom).emit('adminMsg', {user: `admin`, msg: `${user.username} joined the room`})
+        socket.emit('adminMsg', {user: `admin`, msg: `Hey ${user.username}, welcome to the ${user.chatroom} room`})
 
-      socket.join(user.chatroom)
-      callback()
-    }) 
+        socket.to(user.chatroom).emit('adminMsg', {user: `admin`, msg: `${user.username} joined the room`})
 
-    socket.on('clientMsg', (msg) => {
-      const user = getUser(socket.id)
+        socket.join(user.chatroom)
+        callback()
+      }) 
 
-      io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
-      console.log(msg)
-    })
-    
-    //when a user leaves a room or disconnects
-    socket.on('disconnect', () => {
+      socket.on('clientMsg', (msg) => {
+        const user = getUser(socket.id)
+
+        io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
+        console.log(msg)
+      })
+      
+      //when a user leaves a room or disconnects
+      socket.on('disconnect', () => {
+        const user = getUser(socket.id)
+
+        socket.to(user.chatroom).emit('adminMsg', { user: 'admin', msg: `${user.username} left the room` })
         deleteUser(socket.id)
-    })
+      })
+    } catch(e) {
+      console.log(e)
+    }
 })
 
 http.listen(PORT, () => {
