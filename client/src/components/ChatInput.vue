@@ -44,8 +44,6 @@ export default {
 
 <style scoped>
     .fixed{
-        position: absolute;
-        top: 90vh;
-        left: 40%
+        position: relative;
     }
 </style>
