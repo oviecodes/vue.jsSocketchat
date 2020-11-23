@@ -3,14 +3,10 @@
 
 
 <template>
-    <div class='container'>
-        <div v-for="(msg, i) in getMessages" :key="i" class='message'>
-
-          <p :class="msg.type"> 
-              {{ msg.user }}
-              <br>
-              {{ msg.msg }}
-            </p>
+    <div class='chat-container'>
+        <div v-for="(msg, i) in getMessages" :key="i"  :class="msg.type">
+            <p class='username item1' v-show='userDetails.username.trim().toLowerCase() !== msg.user' >{{ msg.user }}</p>
+            <p class="message item2">{{ msg.msg }}</p>
         </div>
     </div>
 </template>
@@ -28,42 +24,69 @@ export default {
         
     },
     computed: {
-        ...mapGetters(['getMessages'])
+        ...mapGetters(['getMessages', 'userDetails'])
     }
 }
 </script>
 
 <style scoped>
     .adminMessage{
-        margin-left: 10%;
-        background: rgb(221, 191, 196);
-        text-align: center;
+       font-size: 10px; 
     }
 
     .myMessage {
-        background: rgb(168, 216, 168);
-        margin-left: 20%;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-column-gap: 2px;
+        justify-content: end;
+        margin-left: 20px;
+        margin-right: 5px;
+        margin-top: 10px;
+    }
+
+    .myMessage > .message{
+        background: rgb(83, 141, 83);
+        border-radius: 10px 0px 10px 10px;
+        padding: 8px;
+        color: white;
         text-align: left;
+    }
+
+    .otherMessages > .message{
+        background: rgb(83, 141, 83);
+        border-radius: 0px 10px 10px 10px;
+        padding: 8px;
+        color: white;
+        text-align: left;
+    }
+
+    .username{
+        margin-top: 10px;
+        color: gray;
+        display: inline;
+        font-size: 8px;
     }
 
     .otherMessages {
-        background: rgb(158, 158, 214);
-        margin-left: 5%;
-        text-align: left;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-column-gap: 3px;
+        justify-content: start;
+        margin-left: 10px;
+        margin-right: 20px;
+        margin-top: 10px;
     }
 
-    .message {
-        padding: 2px 5px;
+    .otherMessages > .item1 { 
+        grid-area: 1 / 2 ;
+     }
+
+    .otherMessages > .item2 { 
+        grid-area: 1 / 1; 
+    }
+
+    .chat-container{
         position: relative;
-        border-radius: 3%;
-        
-    
-    }
-
-    .container{
-        position: absolute;
-        width: 50%;
-        left: 25%;
         border: 1px solid grey;
         border-radius: 2%;
         height: 70vh;
@@ -71,7 +94,14 @@ export default {
     }
 
     p{
-        font-size: 12px;
+        font-size: 10px;
         font-family: 'Montserrat';
+    }
+
+    @media only screen and (min-width: 600px) {
+        .chat-container {
+            width: 50%;
+            left: 25%;
+        }
     }
 </style>
