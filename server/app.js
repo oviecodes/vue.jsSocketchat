@@ -27,9 +27,6 @@ io.on('connection', async(socket) => {
 
         const { error, user } = addUser({id: socket.id, username, chatroom})
 
-        console.log(user)
-        console.log(error)
-
         if(error) {
           
           return callback(error)
