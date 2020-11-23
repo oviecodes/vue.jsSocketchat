@@ -26,25 +26,24 @@ export default {
   data() {
     return {
       message: '',
-      userThingy: { }
     }
   },
   computed: {
     ...mapGetters(["userDetails"])
   },
   methods: {
-    ...mapActions(['setSocketState', 'setMessages', 'resetStateMessages'])
+    ...mapActions(['setSocketState', 'setMessages', 'resetStateMessages', 'getUserDetails'])
   },
   mounted() {
     socket = io(`http://localhost:5000`);
     this.setSocketState(socket)
     
-    this.userThingy = 
+     
     !this.userDetails.username && !this.userDetails.chatroom ? 
-    { username:  this.$route.query.username, chatroom: this.$route.query.chatroom } : 
-    this.userDetails; 
+    this.getUserDetails({ username:  this.$route.query.username, chatroom: this.$route.query.chatroom }) : 
+    null; 
 
-    const { username, chatroom} = this.userThingy
+    const { username, chatroom} = this.userDetails
     
     socket.emit("newUser", { username, chatroom }, () => {
 
@@ -60,7 +59,7 @@ export default {
     })
 
     socket.on('clientMessage', ({ user, msg }) => {
-      let { username, chatroom } = this.userThingy;
+      let { username, chatroom } = this.userDetails;
       username = username.trim().toLowerCase()
       const message = (username === user) ? {
         user,
