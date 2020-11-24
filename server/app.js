@@ -2,11 +2,12 @@
 
 const express = require('express');
 const cors = require('cors')
+const mongoose = require('mongoose')
 const { getUser, getUsersInRoom, addUser, deleteUser  } = require('./users')
+const User = require('./models/User')
 
 const app = express()
 const http = require('http').createServer(app);
-
 
 const io = require("socket.io")(http, {
     cors: {
@@ -25,10 +26,13 @@ io.on('connection', async(socket) => {
       //when a user joins a room
       socket.on('newUser',  async ({ username, chatroom }, callback) => {
 
-        const { error, user } = addUser({id: socket.id, username, chatroom})
+        const { error, user} = addUser({
+          id: socket.id,
+          username,
+          chatroom
+        })
 
         if(error) {
-          
           return callback(error)
         }
 
@@ -38,12 +42,8 @@ io.on('connection', async(socket) => {
           socket.to(user.chatroom).emit('adminMsg', {user: `admin`, msg: `${user.username} joined the room`})
 
           socket.join(user.chatroom)
-        } else {
-          console.log(`page disconnected`)
-          // return callback({ error: 'User disconnected please refresh page'})
         }
 
-        
         callback()
       }) 
 
@@ -52,25 +52,24 @@ io.on('connection', async(socket) => {
 
         if(user !== undefined) {
           io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
-          console.log(msg)
+          console.log(msg, 'user msg')
         } else {
           console.log(`page disconnected`)
-          // return callback({ error: 'User disconnected please refresh page'})
+          return callback('User disconnected please refresh page')
         }
+
+        callback()
 
       })
       
       //when a user leaves a room or disconnects
-      socket.on('disconnect', (callback) => {
+      socket.on('disconnect', async() => {
         const user = getUser(socket.id)
 
         if(user !== undefined) {
           socket.to(user.chatroom).emit('adminMsg', { user: 'admin', msg: `${user.username} left the room` })
-
-        } else {
-          console.log(`page disconnected`)
-          // return callback({ error: 'User disconnected please refresh page'})
         }
+
         deleteUser(socket.id)
       })
 })
