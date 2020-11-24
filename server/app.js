@@ -51,7 +51,6 @@ io.on('connection', async(socket) => {
 
         if(user !== undefined) {
           io.to(user.chatroom).emit('clientMessage', { user: user.username, msg })
-          console.log(msg, 'user msg')
         } else {
           console.log(`page disconnected`)
           return callback('User disconnected please refresh page')

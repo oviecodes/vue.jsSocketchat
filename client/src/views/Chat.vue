@@ -77,15 +77,11 @@ export default {
 
       this.setMessages(message)
     })
-
-    console.log(username, chatroom);
-    console.log(socket)
   },
 
   destroyed() {
     this.resetStateMessages()
     socket.disconnect(true)
-    console.log(socket)
   }
 };
 </script>
