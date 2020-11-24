@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
 const { getUser, getUsersInRoom, addUser, deleteUser  } = require('./users')
-const User = require('./models/User')
 
 const app = express()
 const http = require('http').createServer(app);

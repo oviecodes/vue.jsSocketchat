@@ -140,6 +140,6 @@ export default {
     }
 
     .header > h5 {
-        margin-top: 20%; 
+        margin-top: 1em; 
     }
 </style>

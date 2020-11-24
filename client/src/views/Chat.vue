@@ -45,8 +45,10 @@ export default {
 
     const { username, chatroom} = this.userDetails
     
-    socket.emit("newUser", { username, chatroom }, () => {
-
+    socket.emit("newUser", { username, chatroom }, ( error ) => {
+      if(error) {
+        alert(error)
+      }   
     });
 
     socket.on('adminMsg', ({ user, msg }) => {

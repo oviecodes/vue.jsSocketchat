@@ -1,10 +1,13 @@
 <template>
-  <div class="ui container">
+  <div class="user_form">
+    <div>
+      <h1>Welcome to the chat app</h1>
+    </div>
     <form class="ui form" @submit="onSubmit">
       <!-- username field -->
       <div class="field">
         <label>Username</label>
-        <input type="text" v-model="username" />
+        <input type="text" placeholder="Enter your username" v-model="username" />
       </div>
       <!-- chatroom field -->
 
@@ -62,4 +65,28 @@ export default {
 };
 </script>
 
-<style scoped></style>
+
+<style scoped>
+  h1{
+    margin-bottom: 1em;
+    color: rgb(83, 141, 83);
+  }
+
+  .user_form{
+    display: grid;
+    align-content: center;
+    align-self: center;
+    /* align-items: center; */
+    position: relative;
+    padding: 30px;
+    height: 80vh;
+  }
+
+  @media only screen and (min-width: 600px) {
+    .user_form {
+      width: 50%;
+      left: 25%;
+      padding: 0px;
+    }
+  }
+</style>
