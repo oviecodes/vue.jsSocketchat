@@ -3,7 +3,19 @@
 
 
 <template>
-    <div class='chat-container'>
+    <div class='chat-container' ref="chat_container">
+        <div class='header'> 
+            <h5>{{ capatalize(userDetails.chatroom) }} Room</h5>
+            <router-link to='/'>
+                <button
+                class="ui small button"
+                type="submit"
+                >
+                    Leave room
+                </button>
+            </router-link>
+            
+        </div>
         <div v-for="(msg, i) in getMessages" :key="i"  :class="msg.type">
             <p class='username item1' v-show='userDetails.username.trim().toLowerCase() !== msg.user' >{{ msg.user }}</p>
             <p class="message item2">{{ msg.msg }}</p>
@@ -21,17 +33,27 @@ export default {
         }
     },
     methods: {
-        
+        capatalize(str) {
+            return `${str.slice(0, 1).toUpperCase()}${str.slice(1)}`
+        },
+        scrollToEnd() {
+            const content = this.$refs.chat_container
+            content.scrollTop = content.scrollHeight
+        }
     },
     computed: {
         ...mapGetters(['getMessages', 'userDetails'])
+    },
+    updated() {
+        this.scrollToEnd()
     }
 }
 </script>
 
 <style scoped>
     .adminMessage{
-       font-size: 10px; 
+       font-size: 10px;
+       margin-bottom: 10px; 
     }
 
     .myMessage {
@@ -41,7 +63,7 @@ export default {
         justify-content: end;
         margin-left: 20px;
         margin-right: 5px;
-        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .myMessage > .message{
@@ -74,7 +96,7 @@ export default {
         justify-content: start;
         margin-left: 10px;
         margin-right: 20px;
-        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .otherMessages > .item1 { 
@@ -103,5 +125,21 @@ export default {
             width: 50%;
             left: 25%;
         }
+    }
+
+    .header{
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: space-between;
+        align-items: center;
+        background:  rgb(10, 8, 8);
+        padding: 10px;
+        position: sticky;
+        top: 0;
+        color: white
+    }
+
+    .header > h5 {
+        margin-top: 20%; 
     }
 </style>
