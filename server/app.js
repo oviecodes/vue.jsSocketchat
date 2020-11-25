@@ -15,6 +15,14 @@ const io = require("socket.io")(http, {
     }
 });
 
+if(process.env.NODE_ENV === 'production') {
+  //static folder
+  app.use(express.static(__dirname + '/public'))
+
+  //handle SPA
+  app.get(/.*/, (req, res) => res.sendFile(__dirname, '/public/index.html'));
+}
+
 const PORT = process.env.PORT || 5000
 
 app.use(cors())
