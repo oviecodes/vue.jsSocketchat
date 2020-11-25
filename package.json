@@ -1,19 +1,18 @@
 {
-  "name": "vue.jssocketchat",
+  "name": "chatapp",
   "version": "1.0.0",
-  "description": "simple socket chat",
-  "main": "./server/app.js",
+  "description": "a simple chat application using Vue.js front-end and express.js backend",
+  "main": "app.js",
   "scripts": {
-    "start": "node ./server/app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/oviecodes/vue.jsSocketchat.git"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "author": "Godwin Alexander",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/oviecodes/vue.jsSocketchat/issues"
-  },
-  "homepage": "https://github.com/oviecodes/vue.jsSocketchat#readme"
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.15",
+    "socket.io": "^3.0.3"
+  }
 }
