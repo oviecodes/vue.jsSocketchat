@@ -1,0 +1,19 @@
+{
+  "name": "vue.jssocketchat",
+  "version": "1.0.0",
+  "description": "simple socket chat",
+  "main": "./server/app.js",
+  "scripts": {
+    "start": "node ./server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oviecodes/vue.jsSocketchat.git"
+  },
+  "author": "Godwin Alexander",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oviecodes/vue.jsSocketchat/issues"
+  },
+  "homepage": "https://github.com/oviecodes/vue.jsSocketchat#readme"
+}
