@@ -35,7 +35,7 @@ export default {
     ...mapActions(['setSocketState', 'setMessages', 'resetStateMessages', 'getUserDetails'])
   },
   mounted() {
-    socket = io(`http://localhost:5000`);
+    socket = io();
     this.setSocketState(socket)
     
      
